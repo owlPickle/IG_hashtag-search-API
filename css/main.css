@@ -1,0 +1,145 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #FAFAFA;
+}
+
+img {
+    display: block;
+    object-fit: cover;
+}
+
+.clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.search {
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 60px;
+    width: 500px;
+}
+
+#searchbar {
+    width: 100%;
+    height: 30px;
+}
+
+.container {
+    margin: 0 auto;
+    width: 1180px;
+}
+
+.img-board img {
+    height: 300px;
+    width: 100%;
+}
+
+.img-board img.welcome {
+    width: 100%;
+    height: 100%;
+}
+
+.img-board .wrap {
+    position: relative;
+}
+
+.img-board .cover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, .5);
+    opacity: 0;
+    transition: opacity .3s linear;
+}
+
+.img-board .cover:hover {
+   opacity: 1;
+}
+
+.social {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.social i {
+    padding: 0 20px;
+    font-size: 25px;
+    color: #fff;
+}
+
+.col-3 {
+    width: 31%;
+    float: left;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#more {
+    display: none;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 30%;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    background: #000;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+#more.open {
+    display: block;
+}
+
+#loading, #pop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, .5);    
+}
+
+#loading.open {
+    display: block;
+}
+
+#loading .dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#pop.open {
+    display: block;
+}
+
+#pop .wrap {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 500px;
+}
+
+#pop .wrap img {
+    width: 100%;
+    height: 100%;
+}

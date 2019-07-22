@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IG Image API</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="css/fontello.css">
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+
+<body>
+
+    <div class="search">
+        <input id="searchbar" type="text" placeholder="Search instagram hashtag">
+    </div>
+
+    <div class="board">
+        <div class="img-board container clearfix">
+            <img class="welcome" src="images/welcome.jpeg">
+        </div>
+    </div>
+
+    <a href="javascript:;" id="more">MORE</a>
+
+    <div id="loading">
+        <div class="dot">o o o</div>
+    </div>
+
+    <div id="pop">
+        <div class="wrap">
+            <img id="bigimg" src="" alt="">
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+    <script>
+
+        (function () {
+            let searchbar = document.getElementById('searchbar');
+            let moreBtn = document.getElementById('more');
+            let imgBoard = document.getElementsByClassName('img-board')[0];
+            let loading = document.getElementById('loading');
+            let pop = document.getElementById('pop');
+            let isPageOpen = false;
+            let imgTemplate = '';
+            let endCursor = '';
+            let edges = [];
+
+            searchbar.addEventListener('keyup', function (e) {
+                if (e.keyCode != 13) return;
+                if (searchbar.value.trim() === '') return alert('Write Something');
+
+                imgTemplate = '';
+                hashTag = this.value;
+                searchIMG(this.value);
+            })
+
+            moreBtn.addEventListener("click", function () {
+                searchIMG(hashTag);
+            })
+
+            pop.addEventListener("click", function () {
+                pop.classList.remove('open');
+            })
+
+            // https://www.instagram.com/explore/tags/plebiscito/?__a=1&max_id=
+            function searchIMG(hashTag) {
+                loading.classList.add('open');
+                getUrl = 'https://www.instagram.com/explore/tags/' + hashTag + '/?__a=1';
+
+
+                if (isPageOpen) {
+                    getUrl += '&max_id=' + endCursor;
+                }
+                axios.get(getUrl)
+                    .then(function (res) {
+                        edges = res.data.graphql.hashtag.edge_hashtag_to_media.edges;
+                        isPageOpen = res.data.graphql.hashtag.edge_hashtag_to_media.page_info.has_next_page;
+                        endCursor = res.data.graphql.hashtag.edge_hashtag_to_media.page_info.end_cursor;
+
+                        for (let i = 0; i < edges.length; i++) {
+                            let imgUrl = edges[i].node.display_url;
+
+                            imgTemplate += '<div class="wrap col-3"><img id="thumbnail" src="' + imgUrl + '">'
+                            imgTemplate += '<div class="cover img-cover">'
+                            imgTemplate += '<div class="social">'
+                            imgTemplate += '<i class="icon-heart"></i><i class="icon-comment"></i>'
+                            imgTemplate += '</div></div></div>'
+
+                        }
+
+                        imgBoard.innerHTML = imgTemplate;
+
+                        // pop 
+                        let imgCover = document.getElementsByClassName('img-cover');
+                        let imgBig = document.getElementById('bigimg');
+                        for (let s = 0; s < imgCover.length; s++) {
+                            imgCover[s].addEventListener("click", showBig);
+                        }
+                        
+                        function showBig() {
+                            pop.classList.add('open');
+                            let bigImgUrl = this.previousSibling.src;
+                            imgBig.src = bigImgUrl;
+                        }
+
+                        if (isPageOpen) {
+                            moreBtn.classList.add('open');
+                        } else {
+                            moreBtn.classList.remove('open');
+                        }
+
+                        loading.classList.remove('open');
+                    })
+                    .catch(function (err) {
+                        loading.classList.remove('open');
+                    })
+
+            }
+
+        })();
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
